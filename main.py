@@ -48,16 +48,43 @@ class Window:
         line.draw(self.canvas, fill_color)
 
 
+class Cell:
+    def __init__(
+        self, top_left_point: Point, bottom_right_point: Point, window: Window
+    ):
+        self.has_left_wall = True
+        self.has_right_wall = True
+        self.has_top_wall = True
+        self.has_bottom_wall = True
+        self.__x1 = top_left_point.x
+        self.__x2 = bottom_right_point.x
+        self.__y1 = top_left_point.y
+        self.__y2 = bottom_right_point.y
+        self.__win = window
+
+    def draw(self):
+        if self.has_left_wall:
+            line = Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2))
+            self.__win.draw_line(line, "black")
+        if self.has_top_wall:
+            line = Line(Point(self.__x1, self.__y1), Point(self.__x2, self.__y1))
+            self.__win.draw_line(line, "black")
+        if self.has_right_wall:
+            line = Line(Point(self.__x2, self.__y1), Point(self.__x2, self.__y2))
+            self.__win.draw_line(line, "black")
+        if self.has_bottom_wall:
+            line = Line(Point(self.__x1, self.__y2), Point(self.__x2, self.__y2))
+            self.__win.draw_line(line, "black")
+
+
 def main():
     win = Window(800, 600)
-    line1 = Line(Point(0, 2), Point(3, 8))
-    line2 = Line(Point(5, 3), Point(9, 10))
-    line3 = Line(Point(2, 0), Point(50, 80))
-    line4 = Line(Point(0, 2), Point(300, 299))
-    win.draw_line(line1, "red")
-    win.draw_line(line2, "black")
-    win.draw_line(line3, "red")
-    win.draw_line(line4, "black")
+    cell1 = Cell(Point(100, 100), Point(200, 200), win)
+    cell2 = Cell(Point(200, 200), Point(400, 400), win)
+    cell1.has_bottom_wall = False
+    cell2.has_right_wall = False
+    cell1.draw()
+    cell2.draw()
     win.wait_for_close()
 
 
