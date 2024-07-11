@@ -56,35 +56,45 @@ class Cell:
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
-        self.__x1 = top_left_point.x
-        self.__x2 = bottom_right_point.x
-        self.__y1 = top_left_point.y
-        self.__y2 = bottom_right_point.y
+        self.x1 = top_left_point.x
+        self.x2 = bottom_right_point.x
+        self.y1 = top_left_point.y
+        self.y2 = bottom_right_point.y
         self.__win = window
 
     def draw(self):
         if self.has_left_wall:
-            line = Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2))
+            line = Line(Point(self.x1, self.y1), Point(self.x1, self.y2))
             self.__win.draw_line(line, "black")
         if self.has_top_wall:
-            line = Line(Point(self.__x1, self.__y1), Point(self.__x2, self.__y1))
+            line = Line(Point(self.x1, self.y1), Point(self.x2, self.y1))
             self.__win.draw_line(line, "black")
         if self.has_right_wall:
-            line = Line(Point(self.__x2, self.__y1), Point(self.__x2, self.__y2))
+            line = Line(Point(self.x2, self.y1), Point(self.x2, self.y2))
             self.__win.draw_line(line, "black")
         if self.has_bottom_wall:
-            line = Line(Point(self.__x1, self.__y2), Point(self.__x2, self.__y2))
+            line = Line(Point(self.x1, self.y2), Point(self.x2, self.y2))
             self.__win.draw_line(line, "black")
+
+    def draw_move(self, to_cell, undo=False):
+        fill_color = "red"
+        if undo:
+            fill_color = "gray"
+        center_one = Point((self.x1 + self.x2) // 2, (self.y1 + self.y2) // 2)
+        center_two = Point(
+            (to_cell.x1 + to_cell.x2) // 2, (to_cell.y1 + to_cell.y2) // 2
+        )
+        line = Line(center_one, center_two)
+        self.__win.draw_line(line, fill_color)
 
 
 def main():
     win = Window(800, 600)
-    cell1 = Cell(Point(100, 100), Point(200, 200), win)
-    cell2 = Cell(Point(200, 200), Point(400, 400), win)
-    cell1.has_bottom_wall = False
-    cell2.has_right_wall = False
+    cell1 = Cell(Point(101, 100), Point(200, 200), win)
+    cell2 = Cell(Point(201, 200), Point(400, 400), win)
     cell1.draw()
     cell2.draw()
+    cell2.draw_move(cell1)
     win.wait_for_close()
 
 
